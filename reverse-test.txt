@@ -1,0 +1,15 @@
+3 repeat
+1 2 add
+1 2
+2 reverse
+add
+endrepeat
+
+16
+3 repeat
+sqrt
+endrepeat
+16.0
+3 repeat
+sqrt
+endrepeat

@@ -1,0 +1,5 @@
+10 20 sub
+4 3 add
+1.5 mult
+1.0 add
+100.999 sub
