@@ -69,19 +69,19 @@ namespace calc {
         const double x = stod(x_str);
         const double y = stod(y_str);
         double result_d;
-        string symbol; // TODO: char?
+        char symbol;
         if (op == cmds::add) {
             result_d = x + y;
-            symbol = "+";
+            symbol = '+';
         } else if (op == cmds::sub) {
             result_d = x - y;
-            symbol = "-";
+            symbol = '-';
         } else if (op == cmds::mult) {
             result_d = x * y;
-            symbol = "*";
+            symbol = '*';
         } else if (op == cmds::div) {
             result_d = x / y;
-            symbol = "/";
+            symbol = '/';
         } else {
             throw std::invalid_argument("Invalid operator");
         }
@@ -93,7 +93,7 @@ namespace calc {
         } else {
             std::cout << static_cast<int>(x);
         }
-        std::cout << " " << symbol << " ";
+        std::cout << ' ' << symbol << ' ';
         if (isDouble(y_str)) {
             std::cout << y;
             is_int = false;
