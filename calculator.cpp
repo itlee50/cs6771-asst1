@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 
 using std::string;
 
