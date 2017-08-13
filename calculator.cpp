@@ -12,15 +12,15 @@ namespace calc {
     using std::endl;
     using stack = std::stack<string>;
 
-    void execute(stack &calc_stack, std::istream &in, string s);
+    void execute(stack &calc_stack, std::istream &in, const string s);
     void operate(stack &calc_stack, const string op);
     void sqrt(stack &calc_stack);
     void repeat(stack &calc_stack, std::istream &in);
     void reverse(stack &calc_stack);
-    inline bool isDouble(string s);
-    inline bool isNumber(string s);
-    inline bool isInt(string s);
-    string dtos(double val);
+    inline bool isDouble(const string s);
+    inline bool isNumber(const string s);
+    inline bool isInt(const string s);
+    string dtos(const double val);
 
     namespace cmds {
         const string add = "add";
@@ -33,7 +33,7 @@ namespace calc {
         const string repeat = "repeat";
         const string endrepeat = "endrepeat";
     
-        bool isOp(string s) {
+        bool isOp(const string s) {
             return (
                 s == add ||
                 s == sub ||
@@ -46,7 +46,7 @@ namespace calc {
     /*
      * Handle a token.
      */
-    void execute(stack &calc_stack, std::istream &in, string s) {
+    void execute(stack &calc_stack, std::istream &in, const string s) {
         if (isNumber(s)) {
             calc_stack.push(s);
         } else if (s == cmds::repeat) {
@@ -196,15 +196,15 @@ namespace calc {
         }
     }
     
-    inline bool isDouble(string s) {
+    inline bool isDouble(const string s) {
         return (s.find('.') != std::string::npos);
     }
     
-    inline bool isNumber(string s) {
+    inline bool isNumber(const string s) {
         return (isdigit(s[0]));
     }
 
-    inline bool isInt(string s) {
+    inline bool isInt(const string s) {
         return (isNumber(s) && !isDouble(s));
     }
     
