@@ -64,8 +64,7 @@ namespace calc {
         calc_stack.pop();
         const string y_str = calc_stack.top();
         calc_stack.pop();
-        string result_str;
-        // maybe always use doubles but convert to int if both operands were ints too (truncate if result was not an int e.g. 3/2=1)
+
         const double x = stod(x_str);
         const double y = stod(y_str);
         double result_d;
@@ -85,17 +84,33 @@ namespace calc {
         } else {
             return; // invalid operator, throw exception?
         }
-        if (isDouble(x_str) || isDouble(y_str)) {
-            std::cout << x << " " << symbol << " " << y << " = " << result_d << endl;
-            result_str = std::to_string(result_d); // result_str = blah // precision?
-            // issue since if one is int is still being read as double here...
+
+        bool is_int = true;
+        if (isDouble(x_str)) {
+            std::cout << x;
+            is_int = false;
         } else {
-            const int x_i = static_cast<int>(x);
-            const int y_i = static_cast<int>(y);
-            const int result_i = static_cast<int>(result_d);
-            std::cout << x_i << " " << symbol << " " << y_i << " = " << result_i << endl;
-            result_str = std::to_string(result_i); // result_str = blah
+            std::cout << static_cast<int>(x);
         }
+        std::cout << " " << symbol << " ";
+        if (isDouble(y_str)) {
+            std::cout << y;
+            is_int = false;
+        } else {
+            std::cout << static_cast<int>(y);
+        }
+        std::cout << " = ";
+        string result_str;
+        if (is_int) {
+            const int result_i = static_cast<int>(result_d);
+            std::cout << result_i;
+            result_str = std::to_string(result_i);
+        } else {
+            std::cout << result_d;
+            result_str = std::to_string(result_d); // TODO: precision?
+        }
+        std::cout << endl;
+
         calc_stack.push(result_str); 
     }
     
