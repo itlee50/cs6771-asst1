@@ -4,6 +4,7 @@
 #include <stack>
 #include <vector>
 #include <cmath>
+#include <limits>
 
 using std::string;
 
@@ -42,6 +43,9 @@ namespace calc {
         }
     }
 
+    /*
+     * Handle a token.
+     */
     void execute(stack &calc_stack, std::istream &in, string s) {
         if (isNumber(s)) {
             calc_stack.push(s);
@@ -60,6 +64,10 @@ namespace calc {
         }
     }
     
+    /* 
+     * Removes two numbers from the stack and applies a mathematical operation
+     * to them. The result is pushed back onto the stack.
+     */
     void operate(stack &calc_stack, const string op) {
         const string x_str = calc_stack.top();
         calc_stack.pop();
@@ -108,13 +116,17 @@ namespace calc {
             result_str = std::to_string(result_i);
         } else {
             std::cout << result_d;
-            result_str = std::to_string(result_d); // TODO: precision?
+            result_str = dtos(result_d);
         }
         std::cout << endl;
 
         calc_stack.push(result_str); 
     }
     
+    /*
+     * Removes the top of the stack and calculates the sqrt of this number.
+     * Pushes the result back onto the stack.
+     */
     void sqrt(stack &calc_stack) {
         string s = calc_stack.top();
         calc_stack.pop();
@@ -124,7 +136,7 @@ namespace calc {
             const double d = stod(s);
             const double result = std::sqrt(d);
             std::cout << d << " = " << result;
-            result_str = std::to_string(result); // TODO: precision?
+            result_str = dtos(result);
         } else {
             const int i = stoi(s);
             const int result = std::sqrt(i);
@@ -156,12 +168,16 @@ namespace calc {
             cmds.push_back(s);
         }
         for (int i = 0; i < n; ++i) {
-            for (string cmd : cmds) {
+            for (const string cmd : cmds) {
                 execute(calc_stack, in, cmd);
             }
         }
     }
     
+    /*
+     * Removes the top of the stack. The ordering of the next n (the number that
+     * was at the top of the stack) elements are reversed on the stack. 
+     */
     void reverse(stack &calc_stack) {
         const string n_str = calc_stack.top();
         if (!isInt(n_str)) {
@@ -192,11 +208,15 @@ namespace calc {
         return (isNumber(s) && !isDouble(s));
     }
     
+    /*
+     * Converts a double to string with full precision.
+     */
     string dtos(double val) {
-        return std::to_string(val);
-        // TODO:
-        // std:to_string prints to 6 decimal points and doesnt print the dot if is an int
-        // if really large or small will use scientific notation too...
+        std::stringstream s;
+        s.precision(std::numeric_limits<double>::digits10);
+        s.setf(std::ios::fixed,std::ios::floatfield);
+        s << val;
+        return s.str();
     }
 }
 
@@ -214,7 +234,6 @@ int main(int argc, char* argv[]) {
 
     // read the file while we have input.
     while (in >> s) {
-        // code style? snakecase vs camelcase?
         calc::execute(calc_stack, in, s);
     }
     in.close();
