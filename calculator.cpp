@@ -18,6 +18,7 @@ namespace calc {
     void reverse(stack &calc_stack);
     inline bool isDouble(string s);
     inline bool isNumber(string s);
+    inline bool isInt(string s);
     string dtos(double val);
 
     namespace cmds {
@@ -55,7 +56,7 @@ namespace calc {
         } else if (cmds::isOp(s)) {
             operate(calc_stack, s);
         } else {
-            return; // TODO: throw?
+            throw std::invalid_argument("Invalid token");
         }
     }
     
@@ -82,11 +83,11 @@ namespace calc {
             result_d = x / y;
             symbol = "/";
         } else {
-            return; // TODO: invalid operator, throw exception?
+            throw std::invalid_argument("Invalid operator");
         }
 
         bool is_int = true;
-        if (isDouble(x_str)) { // function for printing out number depending on wheteher is int or double?
+        if (isDouble(x_str)) {
             std::cout << x;
             is_int = false;
         } else {
@@ -123,7 +124,7 @@ namespace calc {
             const double d = stod(s);
             const double result = std::sqrt(d);
             std::cout << d << " = " << result;
-            result_str = std::to_string(result); // result_str = blah // precision?
+            result_str = std::to_string(result); // TODO: precision?
         } else {
             const int i = stoi(s);
             const int result = std::sqrt(i);
@@ -134,26 +135,18 @@ namespace calc {
         calc_stack.push(result_str);
     }
     
-    // void add(stack &calc_stack) {
-    //     const string x = calc_stack.top();
-    //     calc_stack.pop();
-    //     const string y = calc_stack.top();
-    //     calc_stack.pop();
-    //     string result_str;
-    //     if (isDouble(x) || isDouble(y)) {
-    //         const double result = stod(x) + stod(y);
-    //         result_str = dtos(result);
-    //     } else {
-    //         const int result = stoi(x) + stoi(y);
-    //         result_str = std::to_string(result);
-    //     }
-    //     calc_stack.push(result_str);
-    //     std::cout << x << " + " << y << " = " << result_str << endl;
-    // }
-    
+    /*
+     * Removes the top of the stack. Numbers and commands continue to be read
+     * from the file but not acted on until an endrepeat command.
+     */
     void repeat(stack &calc_stack, std::istream &in) {
-        const int n = stoi(calc_stack.top()); // what if not int? would throw, but should we allow e.g. 3.00? or should truncate?
+        const string n_str = calc_stack.top();
+        if (!isInt(n_str)) {
+            throw std::invalid_argument("Invalid int"); 
+        }
+        const int n = stoi(n_str);
         calc_stack.pop();
+
         std::vector<string> cmds;
         string s;
         while (in >> s) {
@@ -170,9 +163,13 @@ namespace calc {
     }
     
     void reverse(stack &calc_stack) {
-        const int n = stoi(calc_stack.top()); // what if not int? would throw, but should we allow e.g. 3.00? or should truncate?
-        // tutor just says should throw on invalid input...
+        const string n_str = calc_stack.top();
+        if (!isInt(n_str)) {
+            throw std::invalid_argument("Invalid int"); 
+        }
+        const int n = stoi(n_str);
         calc_stack.pop();
+
         std::vector<string> reverse_buffer;
         for (int i = 0; i < n; ++i) {
             reverse_buffer.push_back(calc_stack.top());
@@ -190,9 +187,14 @@ namespace calc {
     inline bool isNumber(string s) {
         return (isdigit(s[0]));
     }
+
+    inline bool isInt(string s) {
+        return (isNumber(s) && !isDouble(s));
+    }
     
     string dtos(double val) {
         return std::to_string(val);
+        // TODO:
         // std:to_string prints to 6 decimal points and doesnt print the dot if is an int
         // if really large or small will use scientific notation too...
     }
