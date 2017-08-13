@@ -55,7 +55,7 @@ namespace calc {
         } else if (cmds::isOp(s)) {
             operate(calc_stack, s);
         } else {
-            return; // throw?
+            return; // TODO: throw?
         }
     }
     
@@ -68,7 +68,7 @@ namespace calc {
         const double x = stod(x_str);
         const double y = stod(y_str);
         double result_d;
-        string symbol; // char?
+        string symbol; // TODO: char?
         if (op == cmds::add) {
             result_d = x + y;
             symbol = "+";
@@ -82,11 +82,11 @@ namespace calc {
             result_d = x / y;
             symbol = "/";
         } else {
-            return; // invalid operator, throw exception?
+            return; // TODO: invalid operator, throw exception?
         }
 
         bool is_int = true;
-        if (isDouble(x_str)) {
+        if (isDouble(x_str)) { // function for printing out number depending on wheteher is int or double?
             std::cout << x;
             is_int = false;
         } else {
@@ -118,17 +118,19 @@ namespace calc {
         string s = calc_stack.top();
         calc_stack.pop();
         string result_str;
+        std::cout << "sqrt ";
         if (isDouble(s)) {
             const double d = stod(s);
             const double result = std::sqrt(d);
-            std::cout << "sqrt " << d << " = " << result << endl;
+            std::cout << d << " = " << result;
             result_str = std::to_string(result); // result_str = blah // precision?
         } else {
             const int i = stoi(s);
             const int result = std::sqrt(i);
-            std::cout << "sqrt " << i << " = " << result << endl;
-            result_str = std::to_string(result); // result_str = blah
+            std::cout << i << " = " << result;
+            result_str = std::to_string(result);
         }
+        std::cout << endl;
         calc_stack.push(result_str);
     }
     
@@ -169,6 +171,7 @@ namespace calc {
     
     void reverse(stack &calc_stack) {
         const int n = stoi(calc_stack.top()); // what if not int? would throw, but should we allow e.g. 3.00? or should truncate?
+        // tutor just says should throw on invalid input...
         calc_stack.pop();
         std::vector<string> reverse_buffer;
         for (int i = 0; i < n; ++i) {
