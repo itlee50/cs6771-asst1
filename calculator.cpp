@@ -238,5 +238,4 @@ int main(int argc, char* argv[]) {
         calc::execute(calc_stack, in, s);
     }
     in.close();
-    return 0;
 }
