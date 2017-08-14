@@ -164,15 +164,16 @@ namespace calc {
         string s;
         while (in >> s) {
             if (s == "endrepeat") {
-                break;
+            	for (int i = 0; i < n; ++i) {
+		            for (const string cmd : cmds) {
+		                execute(calc_stack, in, cmd);
+		            }
+		        }
+                return;
             }
             cmds.push_back(s);
         }
-        for (int i = 0; i < n; ++i) {
-            for (const string cmd : cmds) {
-                execute(calc_stack, in, cmd);
-            }
-        }
+        throw std::invalid_argument("Missing endrepeat");
     }
     
     /*
